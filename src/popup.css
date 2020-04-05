@@ -1,0 +1,8 @@
+body{position:relative;width:300px;}
+
+a:visited{color:blue;}
+#ctrls a{text-decoration:none;position:relative;margin:2px;padding:3px;}
+#ctrls a.hilight:hover{color:#338;background-color:#AAF;}
+.tac{text-align:center;}
+.goimg{border:1px solid blue;}
+#last-error{color:red;text-align:center;}
