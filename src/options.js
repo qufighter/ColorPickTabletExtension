@@ -1,4 +1,4 @@
-var _ext_homepage="https://chrome.google.com/webstore/detail/color-picker/ohcpnigalekghcmgcdcenkpelffpdolg";
+var _ext_homepage="https://chrome.google.com/webstore/detail/color-picker/hobaclohjecibademehpakdcphmbodmb";
 if( isFirefox ){
 	_ext_homepage="https://addons.mozilla.org/en-US/firefox/addon/colorpick-eyedropper/";
 }

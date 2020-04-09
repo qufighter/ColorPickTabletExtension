@@ -1,7 +1,7 @@
 var uc_staro='\u2606';
 var uc_starf='\u2605';
-var ln_sprt = 'https://chrome.google.com/webstore/detail/colorpick-eyedropper/ohcpnigalekghcmgcdcenkpelffpdolg/support';//?hl=en-US&gl=US'
-var ln_rate = 'https://chrome.google.com/webstore/detail/colorpick-eyedropper/ohcpnigalekghcmgcdcenkpelffpdolg/reviews';//?hl=en-US&gl=US'
+var ln_sprt = 'https://chrome.google.com/webstore/detail/colorpick-eyedropper/hobaclohjecibademehpakdcphmbodmb/support';//?hl=en-US&gl=US'
+var ln_rate = 'https://chrome.google.com/webstore/detail/colorpick-eyedropper/hobaclohjecibademehpakdcphmbodmb/reviews';//?hl=en-US&gl=US'
 var interactiveMode = false;
 if( isFirefox ){
 	ln_sprt = 'https://addons.mozilla.org/en-US/firefox/addon/colorpick-eyedropper/';

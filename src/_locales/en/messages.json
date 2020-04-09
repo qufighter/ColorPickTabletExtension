@@ -486,6 +486,6 @@
       "message": "Store snapshots to session storage (multiple tabs may be refreshed)"
    },
    "snapError": {
-      "message": "ERROR: Some pages (chrome internal pages, webstore, etc) cannot be captured automatically."
+      "message": "ERROR: Some pages (chrome internal pages, webstore, etc) cannot be captured automatically.  For local file or incognito pages you must explicitly enable the extension.  See help for details."
    }
 }
