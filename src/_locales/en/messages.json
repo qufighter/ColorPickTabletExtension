@@ -479,11 +479,29 @@
    "helpPage": {
       "message": "todo"
    },
+   "theImageAboveWillBeSelected": {
+      "message": "The image displayed above will be selected"
+   },
+   "tapToLaunch": {
+      "message": "Tap to launch"
+   },
    "preventWidescreen": {
       "message": "Restrict from entering widescreen mode"
    },
    "cacheSnapshots": {
       "message": "Store snapshots to session storage (multiple tabs may be refreshed)"
+   },
+   "loadBaseExtHistory": {
+      "message": "Load history from base ColorPick Eyedropper extension"
+   },
+   "storeHistoryToBaseExt": {
+      "message": "Store history to base extension"
+   },
+   "keepFullHistoryBackup": {
+      "message": "Always keep a tablet color history record"
+   },
+   "warnBeforeClosing": {
+      "message": "Warn Before Closing"
    },
    "snapError": {
       "message": "ERROR: Some pages (chrome internal pages, webstore, etc) cannot be captured automatically.  For local file or incognito pages you must explicitly enable the extension.  See help for details."

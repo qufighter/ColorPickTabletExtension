@@ -1,6 +1,8 @@
 var _ext_homepage="https://chrome.google.com/webstore/detail/color-picker/hobaclohjecibademehpakdcphmbodmb";
+var _base_ext_homepage="https://chrome.google.com/webstore/detail/color-picker/ohcpnigalekghcmgcdcenkpelffpdolg";
 if( isFirefox ){
 	_ext_homepage="https://addons.mozilla.org/en-US/firefox/addon/colorpick-eyedropper/";
+	_base_ext_homepage="https://addons.mozilla.org/en-US/firefox/addon/colorpick-eyedropper/";
 }
 var nbsp='\u00A0';
 var infoicon='\u24D8';
@@ -356,6 +358,26 @@ function test_rgb2hsv_to_hsv2rgb(){ // 16777216 total possible rgb colors
 
 function rgbObjMismatch(a, b){
 	return a.r != b.r || a.g != b.g || a.b != b.b;
+}
+
+function go_to_color_pick_base_ext_options(){
+	// todo; early test if the extension exists; and if we can link directly to pages goToOrVisitTab
+	chrome.runtime.sendMessage(extensionsKnown.color_pick, {goToOrVisitTab:'options.html'}, function(response){
+		if( !response || chrome.runtime.lastError ){
+			console.log('you can get the extension here:', _base_ext_homepage);
+		}else{ }
+	});
+}
+
+function copy_history(){
+	// todo; early test if the extension exists; and if we can link directly to pages goToOrVisitTab
+	chrome.runtime.sendMessage(extensionsKnown.color_pick, {bulkAppendHistories:localStorage['pickedHistory']}, function(response){
+		if( !response || chrome.runtime.lastError ){
+			console.log('problem; extension missing.  you can get the extension here:', _base_ext_homepage);
+		}else{
+			localStorage['pickedHistory'] = ''; // hmm
+		}
+	});
 }
 
 function clear_history(ev){
@@ -1036,6 +1058,11 @@ function init(){
 	
 	createOptions(pOptions, document.getElementById('options'));
 	createOptions(pAdvOptions, document.getElementById('adv_options'));
+
+	Cr.elm('div',{childNodes:[
+		Cr.txt('Warning: modifying the above options may break certain integrations such as input[type=color] integration.')
+	]},document.getElementById('adv_options'));
+
 	restore_options();
 	
 	load_history();
@@ -1158,25 +1185,41 @@ Cr.elm("div",{id:"mainbox"},[
 		Cr.elm("img",{src:"img/expand.png"}),
 		Cr.txt(chrome.i18n.getMessage('history'))
 	]),
-	Cr.elm("div",{id:"history", class:'indented-area'},[
+	Cr.elm("div",{id:"history", class:'indented-area bigger'},[
 
-		Cr.txt('For now (initial release) the color history is available within the tablet app.'),
+		Cr.txt('The history may be managed from the base '),
+		Cr.elm("a",{href:_base_ext_homepage,target:"_blank"},[
+			Cr.txt("ColorPick Eyedropper")
+		]),
+		Cr.txt(' extension '),
+		Cr.elm("a",{href:"#", event:['click',go_to_color_pick_base_ext_options]},[
+			Cr.txt("options")
+		]),
+		Cr.txt(' to leverage all features there.'),
+		Cr.elm('br'),Cr.elm('br'),
+		Cr.txt('That history may be loaded into the tablet app when available.'),
 		Cr.elm('br'),
 		Cr.elm("a",{href:"chrome-extension://kjgakcoopjnkaobapohfkipbkpnajocc/webasm/fullscreen.html",target:"_blank"},[
 			Cr.txt("Launch ColorPick Eyedropper Tablet Edition")
 		]),
 		Cr.elm('br'),Cr.elm('br'),
-		Cr.txt('In the future the history may also be managed from the main '),
-		Cr.elm("a",{href:"https://chrome.google.com/webstore/detail/color-picker/ohcpnigalekghcmgcdcenkpelffpdolg",target:"_blank"},[
-			Cr.txt("ColorPick Eyedropper")
-		]),
-		Cr.txt(' extension options to leverage all features there.'),
+		Cr.txt('NOTE: managing history from within the tablet app is impossible.  If you clear the history in the tablet app, or remove indivdual entries from there, this has no effect when the tablet app  is launched again.  Experimental features may soon be available to persist this state but it places your color history at risk.  Install official Mobile ColorPick app for the full experience.'),
 		Cr.elm('br'),Cr.elm('br'),
-		Cr.txt('Please note: as the integration available in the main extension improves, the initial history you capture today may seem to dissapear.  A button will be available here or in Advanced Options to add the history you define now to the new location for the history.  A setting will also allow for control of which history store is active the next time the tablet edition is launched.'),
-		Cr.elm('br'),Cr.elm('br'),
+		Cr.txt('When the main extension is not available; local history; and the only features to manage it are:'),
+		// Cr.txt('Please note: as the integration available in the main extension improves, the initial history you capture today may seem to dissapear.  A button will be available here or in Advanced Options to add the history you define now to the new location for the history.  A setting will also allow for control of which history store is active the next time the tablet edition is launched.'),
+		Cr.elm('br'),
+
+		// if there are history entries here...
+
+		// Cr.elm("a",{href:"#",style:"",event:['click', copy_history]},[
+		// 	Cr.txt('COPY HISTORY'+chrome.i18n.getMessage('copy_history'))
+		// ]),
+		Cr.txt('localStorage.pickedHistory; [ '), // 
 		Cr.elm("a",{href:"#",style:"",event:['click', clear_history]},[
-				Cr.txt(chrome.i18n.getMessage('clear'))
+			Cr.txt(chrome.i18n.getMessage('clear'))
 		]),
+		Cr.txt(' ]. When the main extension is avaialble you may concatentate a new string: localStorage.colorPickHistory=localStorage.colorPickHistory.split("##").join("#")+"#E0E0E0";'), // 
+
 	]),
 	Cr.elm("a",{href:"#",id:"showopt",class:"toggleOpts"},[
 		Cr.elm("img",{src:"img/expand.png"}),

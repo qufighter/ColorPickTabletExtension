@@ -7,14 +7,17 @@ var lastSnap = '';
 
 function sendImageToTabSoon(tabid){
 	// the iamge may not be ready....
-	console.log('snapping results ready soon?' , lastSnap)
 	if( snapping ){
 		console.log('deferring....');
 		setTimeout(function(){
 			sendImageToTabSoon(tabid);
 		}, 100)
 	}else{
-		chrome.runtime.sendMessage({setPickerImage:snaptab,setPickerImageWin:snapwin,pickerImage:lastSnap}, function(response) {});
+		chrome.runtime.sendMessage({setPickerImage:snaptab,setPickerImageWin:snapwin,pickerImage:lastSnap}, function(response) {
+			setTimeout(function(){lastSnap = '';}, 100)  // clearLastSnapshot
+			// presumably we can clear the lastSnap here (after some time??) as optional feature.....
+			// downside is refresh will now loose place unless the session cacheSnapshots mode is enabled
+		});
 	}
 }
 
@@ -40,25 +43,59 @@ function goToOrOpenTab(tab, completedCallback){
   });
 }
 
-// // Make a simple request:
-// chrome.runtime.sendMessage(laserExtensionId, {getTargetData: true},
-//   function(response) {
-//     if (targetInRange(response.targetData))
-//       chrome.runtime.sendMessage(laserExtensionId, {activateLasers: true});
-//   });
 
-chrome.runtime.onMessageExternal.addListener( function(request, sender, sendResponse){
-    // if (sender.id == blocklistedExtension)
-    //   return;  // don't allow this extension access
-    // else if (request.getTargetData)
-    //   sendResponse({targetData: targetData});
-    // else if (request.activateLasers) {
-    //   var success = activateLasers();
-    //   sendResponse({activateLasers: success});
-    // }
+var backupTimeout = 0;
+var lastExternalEnabledMessage = {};
+chrome.runtime.onMessageExternal.addListener(function(request, sender, sendResponse) {
+	if (sender.id === extensionsKnown.color_pick){
+		if(request.isEnabled){
 
-    sendResponse({});
+			if( request.imageDataUri && backupTimeout > 0 ){ // if backupTimeout < 0 we ran out of time
+				//console.log("onMessageExternal with imageDataUri: ", request, sender);
+				clearTimeout(backupTimeout);
+
+				chrome.runtime.sendMessage({notifyPopupReady:request.imageDataUri, snapWin:request.win, snapTab: request.tab, x:request.x, y:request.y}, function(response) {});
+
+				lastSnap = request.imageDataUri;
+				snapping = false;
+				request.imageDataUri = null; // do not need to keep this string data uri reference around in lastExternalEnabledMessage
+			}
+
+			lastExternalEnabledMessage = request;
+
+			sendResponse({});
+		}else if( request.extInactive ){
+			if( backupTimeout > 0 ){
+				//console.log("onMessageExternal extInactive", request, sender);
+
+				clearTimeout(backupTimeout);
+				performClassicCapture(request.win, request.tab);
+			}
+
+			sendResponse({});
+		}else{
+			sendResponse({});
+		}
+	}else{
+		sendResponse({});
+	}
 });
+
+function performClassicCapture(snapwin, snaptab){
+	var cbf=function(dataUrl){
+		if(chrome.runtime.lastError){
+			//console.log('ok wt...', dataUrl, chrome.runtime.lastError.message)
+			chrome.runtime.sendMessage({notifyPopupOfError:1,snapWin:snapwin, snapTab: snaptab}, function(response) {});
+
+		}else{
+			// we can shrink preview before sending it.... probably a good idea...
+			chrome.runtime.sendMessage({notifyPopupReady:dataUrl,snapWin:snapwin, snapTab: snaptab}, function(response) {});
+		}
+		lastSnap = dataUrl;
+		snapping = false;
+	}
+	chrome.tabs.captureVisibleTab(snapwin, {format:'png'}, cbf);
+}
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 	// if(sender.tab && sender.tab.id >= 0){
@@ -76,9 +113,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 	}
 	if (request.getImage){
 
-		console.log('sending resp')
-		sendResponse({});
-		console.log('ongoings resp')
+		//console.log('sending resp')
+		sendResponse({noImageAvailable:!lastSnap});
+		//console.log('ongoings resp')
 
 		sendImageToTabSoon(tabid);
 
@@ -86,28 +123,31 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 		//todo need desired size for getFauxSnap... we can match aspect ratio vertically
 		lsnaptabid=tabid;
 		snapping = true;
-		console.log('got new img...')
-		var cbf=function(dataUrl){
-			if(chrome.runtime.lastError){
-				//console.log('ok wt...', dataUrl, chrome.runtime.lastError.message)
-				chrome.runtime.sendMessage({notifyPopupOfError:1,snapWin:snapwin, snapTab: snaptab}, function(response) {});
 
+		if(snapwin < 1)snapwin=null;
+		lastExternalEnabledMessage = {};
+
+		chrome.runtime.sendMessage(extensionsKnown.color_pick, {getActivatedStatusFromBg: true, active_tab: snaptab, active_window: snapwin }, function(response) {
+			if( !response || chrome.runtime.lastError || !response.askedTheTab ){
+				console.log('got back after getActivatedStatusFromBg unexpected', chrome.runtime.lastError, response);
+				performClassicCapture(snapwin, snaptab); // just snap it ourselves, ColorPick extension not responding...
 			}else{
-				// we can shrink preview before sending it.... probably a good idea...
-				chrome.runtime.sendMessage({notifyPopupReady:dataUrl,snapWin:snapwin, snapTab: snaptab}, function(response) {});
-			}
-			lastSnap = dataUrl;
+				//bg pg page is alive, we await the result.... we got askedTheTab.. so wait some time....
+				backupTimeout = setTimeout(function(){
+					//console.log('backupTimeout fired', lastExternalEnabledMessage);
+					if( lastExternalEnabledMessage.isEnabled ){
+						//cbf(lastExternalEnabledMessage.imageDataUri); //lastExternalEnabledMessage.x, lastExternalEnabledMessage.y
+						// we handled this already if it responded sooner... see backupTimeout
+					}else{
+						performClassicCapture(snapwin, snaptab);
+						backupTimeout = -1;
+					}
 
-			snapping = false;
-		}
-		if(chrome.runtime.lastError)console.log('pre existing err?', chrome.runtime.lastError.message);
-		if(winid < 1)winid=null;
-		chrome.tabs.captureVisibleTab(winid, {format:'png'}, cbf);
-		if(chrome.runtime.lastError){
-			sendResponse({errorSnapping: true, message: chrome.runtime.lastError.message});
-		}else{
-			sendResponse({});
-		}
+				}, 500);
+			}
+		});
+		sendResponse({});
+
 	}else if(request.goToOrVisitTab){
 		goToOrOpenTab(request.goToOrVisitTab);
 		sendResponse({});

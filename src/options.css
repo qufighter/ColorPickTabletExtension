@@ -76,6 +76,9 @@ label.changed:before{
 }
 #status{display:block;height:30px;padding:5px;}
 #ifcotd{width:100px;height:40px;border:none;overflow:hidden;}
+.bigger{
+	font-size:12pt;
+}
 .indented-area{
 	margin-left:14px;
 }

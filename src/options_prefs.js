@@ -8,11 +8,21 @@ var pOptions={};
 var pAdvOptions={};
 var pSyncItems={};
 
+var extensionsKnown = {
+	color_pick: (isChrome ? 'ohcpnigalekghcmgcdcenkpelffpdolg' : null)
+};
+
+if( chrome.runtime.id != 'hobaclohjecibademehpakdcphmbodmb' ){ // development / test settings:
+	extensionsKnown.color_pick = 'ljgenjiadmepdpgnhlpcmmebkiogngli';
+}
+
 //WARNIGN you have to set defaults two places for now...
 //pOptions["pickEveryTime"]={def:false,ind:0,img:'img/icons/no-shadow/icon16.png'}; //default also set in popup.html
 pOptions["preventWidescreen"]={def:true,ind:0};
 
 pOptions["cacheSnapshots"]={def:false,ind:0};
+pOptions["warnBeforeClosing"]={def:false,ind:0};
+
 
 // pOptions["allowWebGl"]={def:false,ind:1,img:'img/warning.png'};
 // pOptions["fishEye"]={def:5,ind:1,select:{1:'1 '+chrome.i18n.getMessage('minimum')+'/'+chrome.i18n.getMessage('off'),2:2,3:3,4:4,5:'5 '+chrome.i18n.getMessage('default'),6:6,7:7,8:8,9:'9 '+chrome.i18n.getMessage('full'),10:10,11:11,12:12,13:13,14:14,15:'15 '+chrome.i18n.getMessage('maxZoom')}};
@@ -24,6 +34,9 @@ pOptions["cacheSnapshots"]={def:false,ind:0};
 // pOptions["ShowRGBHSL"]={def:true,ind:1};
 // pOptions["autocopyhex"]={def:'false',ind:0,select:{'false':chrome.i18n.getMessage('off'),'true':'hexadecimal','rgb':'rgb','hsl':'hsl'}};
 
+pAdvOptions["loadBaseExtHistory"]={def:true,ind:0};
+pAdvOptions["storeHistoryToBaseExt"]={def:true,ind:1};
+pAdvOptions["keepFullHistoryBackup"]={def:true,ind:2};
 
 //pAdvOptions["customCalibration"]={def:false,ind:0,name:'Enable the defunct calibration link above.'};
 // pAdvOptions["usePNG"]={def:true,ind:0};

@@ -2,32 +2,49 @@ var winid;
 var tabid;
 
 function clearError(){
-
 	var exi_err = document.getElementById('last-error');
 	if( exi_err ) exi_err.remove();
 }
 
 function errorSnapping(){
+
+	document.getElementById('loading').style.display="none";
+
 	var gobtn = document.getElementById('go-btn');
 	gobtn.style.display='none';
-
-
 	Cr.elm('div',{
 		id: 'last-error',
 		childNodes:[
 			Cr.txt(chrome.i18n.getMessage('snapError'))
 		]
-	}, document.body)
+	}, document.body);
 }
 
-function successSnapping(dataUrl){
+function successSnapping(dataUrl, request){
+
+	document.getElementById('loading').style.display="none";
+	document.getElementById('loading').style.position='absolute';
+	document.getElementById('loading').style.top='0';
 
 	var gobtn = document.getElementById('go-btn');
 	gobtn.href =  gobtn.href.split('?')[0] + '?winid='+winid+'&tabid='+tabid
+
+	if( request.x || request.y ){
+		gobtn.href += '&startX=' + (request.x || 0) + '&startY=' + (request.y || 0);
+	}
+
 	gobtn.style.display='';
 
 	var exiImg = gobtn.querySelector('img');
-	if( exiImg ) exiImg.remove();
+	if( exiImg ){
+		exiImg.remove();
+	}else{
+		Cr.elm('div',{childNodes:[
+			Cr.txt(chrome.i18n.getMessage('tapToLaunch')),
+			Cr.elm('br'),
+			Cr.txt(chrome.i18n.getMessage('extName'))
+		]}, gobtn);
+	}
 
 	Cr.elm('img',{
 		src: dataUrl,
@@ -52,6 +69,15 @@ function createDOM() {
 			tabid=tab.id;
 
 			newSnapshot();
+
+			var gobtn = document.getElementById('go-btn');
+
+			var container = gobtn.parentNode;
+
+			//Cr.insertNode(, container, gobtn.nextElementSibling);
+			Cr.elm('div',{childNodes:[Cr.txt(chrome.i18n.getMessage('theImageAboveWillBeSelected'))]}, container);
+
+			//insertNode : function(newNode, parentElem, optionalInsertBefore
 
 
 			Cr.elm("div",{id:"ctrls"},[
@@ -79,7 +105,7 @@ function newSnapshot(){
 
 	chrome.runtime.sendMessage({newImage:true, snapwin:winid, snaptab:tabid }, function(response){
 
-		document.getElementById('loading').style.display="none";
+		//document.getElementById('loading').style.display="none";
 
 
 		console.log('got resp', response);
@@ -125,7 +151,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 	}else if (request.notifyPopupReady && reqForUs(request)){
 
-		successSnapping(request.notifyPopupReady);
+		successSnapping(request.notifyPopupReady, request); // TODO: send along... request.x and request.y ??  or do we query for this again later???
 
 		sendResponse({});
 
