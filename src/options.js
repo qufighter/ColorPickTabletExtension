@@ -1205,8 +1205,8 @@ Cr.elm("div",{id:"mainbox"},[
 		Cr.elm('br'),Cr.elm('br'),
 		Cr.txt('NOTE: managing history from within the tablet app is impossible.  If you clear the history in the tablet app, or remove indivdual entries from there, this has no effect when the tablet app  is launched again.  Experimental features may soon be available to persist this state but it places your color history at risk.  Install official Mobile ColorPick app for the full experience.'),
 		Cr.elm('br'),Cr.elm('br'),
-		Cr.txt('When the main extension is not available; local history; and the only features to manage it are:'),
-		// Cr.txt('Please note: as the integration available in the main extension improves, the initial history you capture today may seem to dissapear.  A button will be available here or in Advanced Options to add the history you define now to the new location for the history.  A setting will also allow for control of which history store is active the next time the tablet edition is launched.'),
+		Cr.txt('When the base extension is not available; local history; and the only features to manage it are:'),
+		// Cr.txt('Please note: as the integration available in the base extension improves, the initial history you capture today may seem to dissapear.  A button will be available here or in Advanced Options to add the history you define now to the new location for the history.  A setting will also allow for control of which history store is active the next time the tablet edition is launched.'),
 		Cr.elm('br'),
 
 		// if there are history entries here...
@@ -1218,7 +1218,7 @@ Cr.elm("div",{id:"mainbox"},[
 		Cr.elm("a",{href:"#",style:"",event:['click', clear_history]},[
 			Cr.txt(chrome.i18n.getMessage('clear'))
 		]),
-		Cr.txt(' ]. When the main extension is avaialble you may concatentate a new string: localStorage.colorPickHistory=localStorage.colorPickHistory.split("##").join("#")+"#E0E0E0";'), // 
+		Cr.txt(' ]. When the base extension is avaialble you may concatentate a new string: localStorage.colorPickHistory=localStorage.colorPickHistory.split("##").join("#")+"#E0E0E0";'), // 
 
 	]),
 	Cr.elm("a",{href:"#",id:"showopt",class:"toggleOpts"},[
