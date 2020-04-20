@@ -13,7 +13,10 @@ var extensionsKnown = {
 };
 
 if( chrome.runtime.id != 'hobaclohjecibademehpakdcphmbodmb' ){ // development / test settings:
-	extensionsKnown.color_pick = 'ljgenjiadmepdpgnhlpcmmebkiogngli';
+	if( chrome.runtime.id == 'amlacjdajlinpfncappopgkheaooknbe'){
+		extensionsKnown.color_pick = 'cjfjdjekdbgjbapfnemckbacdmhaocgg';
+	}else
+		extensionsKnown.color_pick = 'ljgenjiadmepdpgnhlpcmmebkiogngli';
 }
 
 //WARNIGN you have to set defaults two places for now...
