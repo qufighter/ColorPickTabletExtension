@@ -48,14 +48,16 @@ var backupTimeout = 0;
 var lastExternalEnabledMessage = {};
 chrome.runtime.onMessageExternal.addListener(function(request, sender, sendResponse) {
 	if (sender.id === extensionsKnown.color_pick){
-		if(request.isEnabled){
+		if(request.isEnabled){ // from color-pick content script
 
-			if( request.imageDataUri && backupTimeout > 0 ){ // if backupTimeout < 0 we ran out of time
+			if( request.imageDataUri && (backupTimeout > 0 || request.alsoLaunch) ){ // if backupTimeout < 0 we ran out of time
 				//console.log("onMessageExternal with imageDataUri: ", request, sender);
 				clearTimeout(backupTimeout);
 
 				chrome.runtime.sendMessage({notifyPopupReady:request.imageDataUri, snapWin:request.win, snapTab: request.tab, x:request.x, y:request.y}, function(response) {});
 
+				snaptab = request.tab;
+				snapwin = request.win;
 				lastSnap = request.imageDataUri;
 				snapping = false;
 				request.imageDataUri = null; // do not need to keep this string data uri reference around in lastExternalEnabledMessage
@@ -63,7 +65,13 @@ chrome.runtime.onMessageExternal.addListener(function(request, sender, sendRespo
 
 			lastExternalEnabledMessage = request;
 
-			sendResponse({});
+			if( lastSnap && request.alsoLaunch ){
+				// just use getURL...
+				window.open("chrome-extension://"+chrome.runtime.id+"/webasm/fullscreen.html?winid="+request.win+"&tabid="+request.tab+"&startX="+request.x+"&startY="+request.y);
+				sendResponse({winOpened:true});
+			}else{
+				sendResponse({});
+			}
 		}else if( request.extInactive ){
 			if( backupTimeout > 0 ){
 				//console.log("onMessageExternal extInactive", request, sender);
@@ -73,6 +81,8 @@ chrome.runtime.onMessageExternal.addListener(function(request, sender, sendRespo
 			}
 
 			sendResponse({});
+		}else if( request.testAvailable ){
+			sendResponse({available:true});
 		}else{
 			sendResponse({});
 		}
