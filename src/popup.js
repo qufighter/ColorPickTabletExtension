@@ -108,7 +108,7 @@ function newSnapshot(){
 		//document.getElementById('loading').style.display="none";
 
 
-		console.log('got resp', response);
+		//console.log('got resp', response);
 
 
 		if( response.errorSnapping ){

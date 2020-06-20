@@ -102,7 +102,7 @@ function makeImageDataUrlActive(dUrl){
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
-	console.log('tab messge', request, sender)
+	//console.log('tab messge', request, sender)
 
 	if( request.setPickerImage ){
 
