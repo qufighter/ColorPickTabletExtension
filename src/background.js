@@ -83,9 +83,6 @@ chrome.runtime.onMessageExternal.addListener(function(request, sender, sendRespo
 			sendResponse({});
 		}else if( request.testAvailable ){
 			sendResponse({available:true});
-		}else if( request.launchOptions ){
-			goToOrOpenTab('options.html')
-			sendResponse({winOpened:true});
 		}else{
 			sendResponse({});
 		}
