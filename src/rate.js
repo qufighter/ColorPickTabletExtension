@@ -4,10 +4,13 @@ var ln_sprt = 'https://chrome.google.com/webstore/detail/colorpick-eyedropper/ho
 var ln_rate = 'https://chrome.google.com/webstore/detail/colorpick-eyedropper/hobaclohjecibademehpakdcphmbodmb/reviews';//?hl=en-US&gl=US'
 var interactiveMode = false;
 if( isFirefox ){
-	ln_sprt = 'https://addons.mozilla.org/en-US/firefox/addon/colorpick-eyedropper/';
+	ln_sprt = 'https://addons.mozilla.org/en-US/firefox/addon/colorpick-eyedropper/'; // fixme
 	ln_rate = 'https://addons.mozilla.org/en-US/firefox/addon/colorpick-eyedropper/reviews/';
 }
-
+}else if( isEdge ){
+	ln_sprt = 'https://microsoftedge.microsoft.com/addons/detail/colorpick-eyedropper/pieiiifgcmhldgbniafejdimnjnjcgfo'; // fixme
+	ln_rate = 'https://microsoftedge.microsoft.com/addons/detail/colorpick-eyedropper/pieiiifgcmhldgbniafejdimnjnjcgfo';
+}
 function createRatings(){
 	setTimeout(function(){
 		restorePreviousRating();

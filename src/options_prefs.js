@@ -4,19 +4,21 @@ var isWindows=plat3=='win';
 var isMac=plat3=='mac';
 var isFirefox = window.navigator.userAgent.indexOf('Firefox') > -1;
 var isChrome = window.navigator.userAgent.indexOf('Chrome/') > -1;
+var isEdge = window.navigator.userAgent.indexOf('Edge') > -1;
 var pOptions={};
 var pAdvOptions={};
 var pSyncItems={};
 
 var extensionsKnown = {
-	color_pick: (isChrome ? 'ohcpnigalekghcmgcdcenkpelffpdolg' : null)
+	color_pick: (isChrome ? 'ohcpnigalekghcmgcdcenkpelffpdolg' : (isFirefox ? 'jid1-kCS67LPIOiGf2Q@jetpack' : (isEdge ? 'pieiiifgcmhldgbniafejdimnjnjcgfo' : null) ))
 };
 
 if( chrome.runtime.id != 'hobaclohjecibademehpakdcphmbodmb' ){ // development / test settings:
 	if( chrome.runtime.id == 'amlacjdajlinpfncappopgkheaooknbe'){
 		extensionsKnown.color_pick = 'cjfjdjekdbgjbapfnemckbacdmhaocgg';
-	}else
+	}else if( chrome.runtime.id == 'kjgakcoopjnkaobapohfkipbkpnajocc' ){
 		extensionsKnown.color_pick = 'ljgenjiadmepdpgnhlpcmmebkiogngli';
+	}
 }
 
 //WARNIGN you have to set defaults two places for now...

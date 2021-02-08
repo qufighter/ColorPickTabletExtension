@@ -1,8 +1,12 @@
 var _ext_homepage="https://chrome.google.com/webstore/detail/color-picker/hobaclohjecibademehpakdcphmbodmb";
 var _base_ext_homepage="https://chrome.google.com/webstore/detail/color-picker/ohcpnigalekghcmgcdcenkpelffpdolg";
 if( isFirefox ){
-	_ext_homepage="https://addons.mozilla.org/en-US/firefox/addon/colorpick-eyedropper/";
+	_ext_homepage="https://addons.mozilla.org/en-US/firefox/addon/colorpick-eyedropper/"; // fixme
 	_base_ext_homepage="https://addons.mozilla.org/en-US/firefox/addon/colorpick-eyedropper/";
+}
+if( isEdge ){
+	_ext_homepage="https://microsoftedge.microsoft.com/addons/detail/colorpick-eyedropper/pieiiifgcmhldgbniafejdimnjnjcgfo"; // fixme
+	_base_ext_homepage="https://microsoftedge.microsoft.com/addons/detail/colorpick-eyedropper/pieiiifgcmhldgbniafejdimnjnjcgfo";
 }
 var nbsp='\u00A0';
 var infoicon='\u24D8';
