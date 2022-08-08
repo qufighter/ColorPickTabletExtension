@@ -123,4 +123,4 @@ function navToPallete(ev, addColor){ // probably unused
 }
 
 //run build_exports.sh to create EXPORT_options_prefs.js
-//export {storage, plat3, isWindows, isMac, isFirefox, isChrome, isEdge, pOptions, pAdvOptions, pSyncItems, extensionsKnown, formatColorValues, formatColorValuesWith, navTo, navToHelp, navToDesktop, navToMobile, navToReg, navToOptions, navToHistory, navToPallete}
+export {storage, plat3, isWindows, isMac, isFirefox, isChrome, isEdge, pOptions, pAdvOptions, pSyncItems, extensionsKnown, formatColorValues, formatColorValuesWith, navTo, navToHelp, navToDesktop, navToMobile, navToReg, navToOptions, navToHistory, navToPallete}

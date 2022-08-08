@@ -33,7 +33,7 @@ function preventEventDefault(ev){
 	return false;
 }
 function toggle_next_sibling_display(ev){
-	who=getEventTargetA(ev);
+	var who=getEventTargetA(ev);
 	var nss=who.nextSibling.style;
 	var arr=who.firstChild;
 	if(!arr || arr.nodeName != 'IMG')arr=new Image();
@@ -101,7 +101,7 @@ function save_options() {
 	if(!iconbitmap){
 		var iconPath='img/';
 		if(appleIcon)iconPath+='apple/';
-		chrome.browserAction.setIcon({path:chrome.extension.getURL(iconPath+'icon19.png')});//update icon (to be configurable)
+		chrome.action.setIcon({path:chrome.runtime.getURL(iconPath+'icon19.png')});//update icon (to be configurable)
 	}
 	
 	if(typeof(localStorage["usageStatistics"])=='undefined')localStorage["usageStatistics"]=false;
@@ -626,7 +626,7 @@ function createPalleteSwatch(hex, append){
 		//]),
 		Cr.elm('input',{type:'text',value:hex,class:'hex',event:['change', swatchChanged]}),
 		Cr.elm("a",{class:'palette-nav', title: chrome.i18n.getMessage('generate_palette'), events:['click',paletteForColorHex]},[Cr.txt('\u25B7')]),
-		Cr.elm("img",{class:'close',draggable:false,align:'top',src:chrome.extension.getURL('img/close.png'),events:['click',removeSwatch]})
+		Cr.elm("img",{class:'close',draggable:false,align:'top',src:chrome.runtime.getURL('img/close.png'),events:['click',removeSwatch]})
 	], append ? swHld : null);
 }
 
@@ -956,7 +956,8 @@ function load_history(){
 }
 function disableSelection(){document.body.style.userSelect='none';}
 function enableSelection(){document.body.style.userSelect='';}
-var histReSize=false;histReSizeVrt=false;
+var histReSize=false;
+var histReSizeVrt=false;
 function dragHist(ev){ histReSize=true;disableSelection(); }
 function dragHistVrt(ev){ histReSizeVrt=true;disableSelection(); }
 function dragHistBth(ev){ histReSize=histReSizeVrt=true;disableSelection(); }

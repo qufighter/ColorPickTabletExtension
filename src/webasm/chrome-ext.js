@@ -1,4 +1,5 @@
-var tabid, winid;
+var tabid
+var winid;
 var preReqLoaded = false;
 var settingsState = {};
 
@@ -140,9 +141,14 @@ function toHex(N) {//http://www.javascripter.net/faq/rgbtohex.htm
       + "0123456789ABCDEF".charAt(N%16);
 }
 function rgb2hsl(r, g, b){//http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
-    r /= 255, g /= 255, b /= 255;
-    var max = Math.max(r, g, b), min = Math.min(r, g, b);
-    var h, s, l = (max + min) / 2;
+    r /= 255.0;
+    g /= 255.0;
+    b /= 255.0;
+    var max = Math.max(r, g, b)
+    var min = Math.min(r, g, b);
+    var h;
+    var s;
+    var l = (max + min) / 2;
     if(max == min){
         h = s = 0; // achromatic
     }else{
@@ -219,4 +225,3 @@ function historyLoaded(numLoaded){
 function palleteLoaded(numLoaded){
 	// expect 0..
 }
-

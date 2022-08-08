@@ -1,9 +1,19 @@
-var tabid, winid;
-var snapwin, snaptab;
+// because of absolute insanity in vanilla JS handling of the statement export or import (causing catostrophic falure as a non module script)
+// you must run build_exports.sh prior to reloading/deplying - otherwise you'll get outdated versions of any needed export below... sorry
+// and special thanks to manifest version 3 basically forcing single file and modules on us....
+
+import { extensionsKnown} from "./EXPORT_options_prefs.js";
+//import {} from "./EXPORT_options_prefs_helpers.js";
+
+var tabid;
+var winid;
+var snapwin
+var snaptab;
 var usePNG = true;
 
 var snapping = false;
 var lastSnap = '';
+var lsnaptabid;
 
 function sendImageToTabSoon(tabid){
 	// the iamge may not be ready....
@@ -22,7 +32,7 @@ function sendImageToTabSoon(tabid){
 }
 
 function goToOrOpenTab(tab, completedCallback){
-  var optionsUrl = chrome.extension.getURL(tab); // typically "options.html"
+  var optionsUrl = chrome.runtime.getURL(tab); // typically "options.html"
   completedCallback = completedCallback || function(){};
   chrome.tabs.query({
     url: optionsUrl,

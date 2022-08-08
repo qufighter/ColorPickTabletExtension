@@ -6,6 +6,8 @@ PROG="ColorPickTabletEdition"
 mani="manifest.json"
 mfj=`ls manifest.json`
 
+./build_exports.sh
+
 if [ "$mfj" != "$mani" ]; then
    echo "manifest not found"
    exit

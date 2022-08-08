@@ -14,10 +14,10 @@ function winResized(){
 window.addEventListener('resize', winResized)
 
 function firstRezie(){
-	if( spinnerElement.style.display != 'none' ){
+	if(  typeof(spinnerElement) != 'undefined' && spinnerElement.style.display != 'none' ){
 		setTimeout(firstRezie, 250);
 	}else{
-		if( statusElement.innerHTML == '' ){
+		if( typeof(statusElement) != 'undefined' && statusElement.innerHTML == '' ){
 			document.getElementById('hide-these').style.display="none";
 			winResized();
 		}

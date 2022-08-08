@@ -1,7 +1,7 @@
 // these functions are NOT included in user.js (content scripts)
 
 //run build_exports.sh to create EXPORT_options_prefs_helpers.js
-//import  {storage, pOptions, pAdvOptions, pSyncItems} from "./EXPORT_options_prefs.js";
+import  {storage, pOptions, pAdvOptions, pSyncItems} from "./EXPORT_options_prefs.js"
 
 function sendReloadPrefs(cb){
 	var cbf=cb;
@@ -85,4 +85,4 @@ function loadExtensionPreferences(cbf){
 }
 
 //run build_exports.sh to create EXPORT_options_prefs_helpers.js
-//export {sendReloadPrefs, chromeStorageSaveALocalStor, saveSyncItemsToChromeSyncStorage, saveToChromeSyncStorage, loadSettingsFromChromeSyncStorage, loadPrefToOptsObj, loadExtensionPreferences}
+export {sendReloadPrefs, chromeStorageSaveALocalStor, saveSyncItemsToChromeSyncStorage, saveToChromeSyncStorage, loadSettingsFromChromeSyncStorage, loadPrefToOptsObj, loadExtensionPreferences}
