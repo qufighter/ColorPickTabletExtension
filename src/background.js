@@ -147,17 +147,26 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 		if(snapwin < 1)snapwin=null;
 		lastExternalEnabledMessage = {};
 
+		// in case other ext does not respond, errors, etc... this is really a backup-backupTimeout
+		backupTimeout = setTimeout(function(){
+			performClassicCapture(snapwin, snaptab);
+			clearTimeout(backupTimeout);
+			backupTimeout = -1;
+		}, 500);
+		
 		chrome.runtime.sendMessage(extensionsKnown.color_pick, {getActivatedStatusFromBg: true, active_tab: snaptab, active_window: snapwin }, function(response) {
 			if( !response || chrome.runtime.lastError || !response.askedTheTab ){
 				console.log('got back after getActivatedStatusFromBg unexpected', chrome.runtime.lastError, response);
 				performClassicCapture(snapwin, snaptab); // just snap it ourselves, ColorPick extension not responding...
 			}else{
 				//bg pg page is alive, we await the result.... we got askedTheTab.. so wait some time....
+				clearTimeout(backupTimeout);
 				backupTimeout = setTimeout(function(){
 					//console.log('backupTimeout fired', lastExternalEnabledMessage);
 					if( lastExternalEnabledMessage.isEnabled ){
 						//cbf(lastExternalEnabledMessage.imageDataUri); //lastExternalEnabledMessage.x, lastExternalEnabledMessage.y
 						// we handled this already if it responded sooner... see backupTimeout
+						//console.log('we seem to believe the other ext will respond with the watermark free image...')
 					}else{
 						performClassicCapture(snapwin, snaptab);
 						backupTimeout = -1;
